@@ -1,4 +1,4 @@
-module github.com/senomas/otel-fluentd-exporter
+module github.com/senomas/otel_fluentd_exporter
 
 go 1.19
 
