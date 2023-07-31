@@ -3,7 +3,7 @@ dist:
   description: Local OpenTelemetry To Fluend
   output_path: dist
 exporters:
-  - gomod: github.com/senomas/otel-fluentd/exporter master
+  - gomod: github.com/senomas/otel-fluentd/exporter dev
 
 receivers:
   - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.69.1
