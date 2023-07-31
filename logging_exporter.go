@@ -30,7 +30,7 @@ func (s *fluentdExporter) pushTraces(_ context.Context, td ptrace.Traces) error 
 	if err != nil {
 		return err
 	}
-	data["traces"] = string(buf)
+	data["data"] = string(buf)
 	err = s.fluent.Post(s.tagTrace, data)
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (s *fluentdExporter) pushMetrics(_ context.Context, md pmetric.Metrics) err
 	if err != nil {
 		return err
 	}
-	data["traces"] = string(buf)
+	data["data"] = string(buf)
 	err = s.fluent.Post(s.tagMetric, data)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (s *fluentdExporter) pushLogs(_ context.Context, ld plog.Logs) error {
 	if err != nil {
 		return err
 	}
-	data["traces"] = string(buf)
+	data["data"] = string(buf)
 	err = s.fluent.Post(s.tagLog, data)
 	if err != nil {
 		return err
