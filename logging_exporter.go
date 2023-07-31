@@ -12,7 +12,9 @@ import (
 )
 
 type fluentdExporter struct {
-	tag              string
+	tagTrace         string
+	tagMetric        string
+	tagLog           string
 	fluent           *fluent.Fluent
 	logsMarshaler    plog.Marshaler
 	metricsMarshaler pmetric.Marshaler
@@ -29,7 +31,7 @@ func (s *fluentdExporter) pushTraces(_ context.Context, td ptrace.Traces) error 
 		return err
 	}
 	data["traces"] = string(buf)
-	err = s.fluent.Post(s.tag, data)
+	err = s.fluent.Post(s.tagTrace, data)
 	if err != nil {
 		return err
 	}
@@ -46,7 +48,7 @@ func (s *fluentdExporter) pushMetrics(_ context.Context, md pmetric.Metrics) err
 		return err
 	}
 	data["traces"] = string(buf)
-	err = s.fluent.Post(s.tag, data)
+	err = s.fluent.Post(s.tagMetric, data)
 	if err != nil {
 		return err
 	}
@@ -62,7 +64,7 @@ func (s *fluentdExporter) pushLogs(_ context.Context, ld plog.Logs) error {
 		return err
 	}
 	data["traces"] = string(buf)
-	err = s.fluent.Post(s.tag, data)
+	err = s.fluent.Post(s.tagLog, data)
 	if err != nil {
 		return err
 	}
@@ -71,7 +73,9 @@ func (s *fluentdExporter) pushLogs(_ context.Context, ld plog.Logs) error {
 
 func newFluentdExporter(tag string, fluent *fluent.Fluent) *fluentdExporter {
 	return &fluentdExporter{
-		tag:              tag,
+		tagTrace:         tag + ".trace",
+		tagMetric:        tag + ".metric",
+		tagLog:           tag + ".log",
 		fluent:           fluent,
 		logsMarshaler:    otlptext.NewTextLogsMarshaler(),
 		metricsMarshaler: otlptext.NewTextMetricsMarshaler(),
