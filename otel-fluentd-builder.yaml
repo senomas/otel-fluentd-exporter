@@ -1,0 +1,9 @@
+dist:
+  name: otel-fluentd
+  description: Local OpenTelemetry To Fluend
+  output_path: dist
+exporters:
+  - gomod: exporter
+
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.69.1
