@@ -42,7 +42,7 @@ func createDefaultConfig() component.Config {
 
 func createTracesExporter(ctx context.Context, set exporter.CreateSettings, config component.Config) (exporter.Traces, error) {
 	cfg := config.(*Config)
-	fluent, err := fluent.New(fluent.Config{FluentHost: cfg.Host, FluentPort: cfg.Port})
+	fluent, err := createFluent(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func createTracesExporter(ctx context.Context, set exporter.CreateSettings, conf
 
 func createMetricsExporter(ctx context.Context, set exporter.CreateSettings, config component.Config) (exporter.Metrics, error) {
 	cfg := config.(*Config)
-	fluent, err := fluent.New(fluent.Config{FluentHost: cfg.Host, FluentPort: cfg.Port})
+	fluent, err := createFluent(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func createMetricsExporter(ctx context.Context, set exporter.CreateSettings, con
 
 func createLogsExporter(ctx context.Context, set exporter.CreateSettings, config component.Config) (exporter.Logs, error) {
 	cfg := config.(*Config)
-	fluent, err := fluent.New(fluent.Config{FluentHost: cfg.Host, FluentPort: cfg.Port})
+	fluent, err := createFluent(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -92,4 +92,19 @@ func createLogsExporter(ctx context.Context, set exporter.CreateSettings, config
 		exporterhelper.WithQueue(exporterhelper.QueueSettings{Enabled: false}),
 		exporterhelper.WithShutdown(fluentdSync(fluent)),
 	)
+}
+
+func createFluent(cfg *Config) (*fluent.Fluent, error) {
+	return fluent.New(fluent.Config{
+		FluentHost:   cfg.Host,
+		FluentPort:   cfg.Port,
+		Timeout:      cfg.Timeout,
+		WriteTimeout: cfg.WriteTimeout,
+		BufferLimit:  cfg.BufferLimit,
+		RetryWait:    cfg.RetryWait,
+		MaxRetry:     cfg.MaxRetry,
+		MaxRetryWait: cfg.MaxRetryWait,
+		TagPrefix:    cfg.TagPrefix,
+		Async:        cfg.Async,
+	})
 }
